@@ -77,9 +77,11 @@ jobs:
       - uses: bluwy/substitute-string-action@v3
         id: sub
         with:
-          _input-text: 'Hello World!'
+          _input-text: 'Hello {{World}}!'
+          _format-key: '{{key}}'
           World: GitHub
-      - run: echo ${{ steps.sub.outputs.result }} # Prints 'Hello GitHub!'
+      - name: result
+        run: echo ${{ steps.sub.outputs.result }} # Prints 'Hello GitHub!'
 
       - name: Create .env file
         run: |
