@@ -56,7 +56,7 @@ jobs:
       matrix:
         # macos-14 is the Apple Silicon M1 runner
         platform: [ubuntu-20.04, windows-latest, 'macos-13', 'macos-14']
-    if: ${{ needs.create-release.outputs.release-published == 'true' }}
+    # if: ${{ needs.create-release.outputs.release-published == 'true' }}
 
     steps:
       - uses: actions/checkout@v4
