@@ -77,9 +77,9 @@ jobs:
       - uses: bluwy/substitute-string-action@v3
         id: sub
         with:
-          _input-text: 'Hello {{World}}!'
+          _input-text: 'VITE_DISPENSER_AUTH0_DOMAIN="{{VITE_DISPENSER_AUTH0_DOMAIN}}"'
           _format-key: '{{key}}'
-          World: GitHub
+          VITE_DISPENSER_AUTH0_DOMAIN: dispenser-prod.eu.auth0.com
       - name: result
         run: echo ${{ steps.sub.outputs.result }} # Prints 'Hello GitHub!'
 
