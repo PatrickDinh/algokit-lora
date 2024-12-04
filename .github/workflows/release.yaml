@@ -76,14 +76,14 @@ jobs:
 
       - name: Create .env file
         run: |
-          sed -E -n 's/(VITE_[A-Z0-9_]+)=(.*)/\1="%%\1%%"/p' .env.sample > .env
+          sed -E -n 's/(VITE_[A-Z0-9_]+)=(.*)/\1="{{\1}}"/p' .env.sample > .env
           cat .env
 
       - name: Substitute environment variables
         uses: bluwy/substitute-string-action@v3
         with:
           _input-file: '.env'
-          _format-key: '%%key%%'
+          _format-key: '{{key}}'
           VITE_DISPENSER_AUTH0_DOMAIN: dispenser-prod.eu.auth0.com
           VITE_DISPENSER_AUTH0_CLIENT_ID: Cg13HjvSV45pMme4dnK9yVJde8tVeDaM
           VITE_DISPENSER_AUTH0_AUDIENCE: api-prod-dispenser-user
@@ -93,31 +93,31 @@ jobs:
       - name: debug
         run: cat .env
 
-      - name: Build for Linux
-        id: build-linux
-        if: ${{ runner.os == 'Linux' }}
-        uses: ./.github/actions/build-linux
-        with:
-          release-version: v1.0.0
+      # - name: Build for Linux
+      #   id: build-linux
+      #   if: ${{ runner.os == 'Linux' }}
+      #   uses: ./.github/actions/build-linux
+      #   with:
+      #     release-version: v1.0.0
 
-      - name: Build for Windows
-        id: build-windows
-        if: ${{ runner.os == 'Windows' }}
-        uses: ./.github/actions/build-windows
-        with:
-          production-release: ${{ inputs.production-release }}
-          release-version: v1.0.0
-          package_name: algokit-lora
-          azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+      # - name: Build for Windows
+      #   id: build-windows
+      #   if: ${{ runner.os == 'Windows' }}
+      #   uses: ./.github/actions/build-windows
+      #   with:
+      #     production-release: ${{ inputs.production-release }}
+      #     release-version: v1.0.0
+      #     package_name: algokit-lora
+      #     azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+      #     azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     azure_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
-      - name: Build for Mac
-        id: build-mac
-        if: ${{ runner.os == 'macOS' }}
-        uses: ./.github/actions/build-mac
-        with:
-          production-release: ${{ inputs.production-release }}
-          release-version: v1.0.0
+      # - name: Build for Mac
+      #   id: build-mac
+      #   if: ${{ runner.os == 'macOS' }}
+      #   uses: ./.github/actions/build-mac
+      #   with:
+      #     production-release: ${{ inputs.production-release }}
+      #     release-version: v1.0.0
     outputs:
       linux-artifact-name: ${{ steps.build-linux.outputs.artifact-name }}
