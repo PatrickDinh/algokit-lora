@@ -78,37 +78,21 @@ jobs:
       - name: Create .env file
         run: |
           sed -n 's/\(VITE_[A-Z0-9_]\+\)=\(.*\)/\1="{{\1}}"/p' .env.sample > .env
-          cat .env
 
       - name: Substitute environment variables
         run: |
-          # Configure static site transforms if provided
-          if [ ! -z "${{ env.env-vars-transforms }}" ]
-          then
-            readarray -t transforms <<<"${{ env.env-vars-transforms }}"
-            replacements=""
-            for i in "${!transforms[@]}"
-            do
-              trimmed="$(echo -e "${transforms[i]}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-              IFS=':' read -r placeholder value <<< "$trimmed"
-              if [ ! -z "$placeholder" ]
-              then
-              replacements+="s/{{$placeholder}}/$(echo $value | sed -e 's/\\/\\\\/g; s/\//\\\//g; s/&/\\\&/g')/gI;"
-              fi
-            done
-
-            if [ ! -z "$replacements" ]
-            then
-              sed -i "$replacements" .env;
-            fi
-          fi
+          sed -i 's/{{VITE_DISPENSER_AUTH0_DOMAIN}}/${{ env.VITE_DISPENSER_AUTH0_DOMAIN }}/g' .env
+          sed -i 's/{{VITE_DISPENSER_AUTH0_CLIENT_ID}}/${{ env.VITE_DISPENSER_AUTH0_CLIENT_ID }}/g' .env
+          sed -i 's/{{VITE_DISPENSER_AUTH0_AUDIENCE}}/${{ env.VITE_DISPENSER_AUTH0_AUDIENCE }}/g' .env
+          sed -i 's/{{VITE_TESTNET_DISPENSER_API_URL}}/${{ env.VITE_TESTNET_DISPENSER_API_URL }}/g' .env
+          sed -i 's/{{VITE_TESTNET_DISPENSER_ADDRESS}}/${{ env.VITE_TESTNET_DISPENSER_ADDRESS }}/g' .env
         env:
-          env-vars-transforms: |-
-            VITE_DISPENSER_AUTH0_DOMAIN:dispenser-prod.eu.auth0.com
-            VITE_DISPENSER_AUTH0_CLIENT_ID:Cg13HjvSV45pMme4dnK9yVJde8tVeDaM
-            VITE_DISPENSER_AUTH0_AUDIENCE:api-prod-dispenser-user
-            VITE_TESTNET_DISPENSER_API_URL:https://api.dispenser.algorandfoundation.tools
-            VITE_TESTNET_DISPENSER_ADDRESS:Z5GPJQCHVU54C2I4FLYNE2XHRQRL5OV2GPJQKXJFMW34CRIN2KRQFXF7DI
+          VITE_DISPENSER_AUTH0_DOMAIN:dispenser-prod.eu.auth0.com
+          VITE_DISPENSER_AUTH0_CLIENT_ID:Cg13HjvSV45pMme4dnK9yVJde8tVeDaM
+          VITE_DISPENSER_AUTH0_AUDIENCE:api-prod-dispenser-user
+          VITE_TESTNET_DISPENSER_API_URL:https://api.dispenser.algorandfoundation.tools
+          VITE_TESTNET_DISPENSER_ADDRESS:Z5GPJQCHVU54C2I4FLYNE2XHRQRL5OV2GPJQKXJFMW34CRIN2KRQFXF7DI
+
 
       - name: Build for Linux
         id: build-linux
