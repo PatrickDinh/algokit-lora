@@ -25,37 +25,9 @@ permissions:
   packages: read
 
 jobs:
-  ci:
-    name: CI
-    uses: makerxstudio/shared-config/.github/workflows/node-ci.yml@main
-    with:
-      working-directory: .
-      node-version: 20.x
-      audit-script: npm run audit
-      compile-script: npm run check-types
-      test-script: npm run test
-      pre-test-script: |
-        pipx install algokit
-        algokit localnet start
-        npx --yes wait-on tcp:4001 -t 30000
-
-  build-website:
-    name: Build Website
-    uses: makerxstudio/shared-config/.github/workflows/node-build-zip.yml@main
-    with:
-      node-version: 20.x
-      build-path: dist
-      artifact-name: website
-      static-site: true
-      static-site-env-prefix: VITE
-    needs:
-      - ci
-
   create-release:
     runs-on: [ubuntu-20.04]
     name: Create release
-    needs:
-      - ci
     steps:
       - uses: actions/checkout@v4
         with:
@@ -75,7 +47,6 @@ jobs:
       release-tag: ${{ steps.create-release-action.outputs.release-tag }}
       release-id: ${{ steps.create-release-action.outputs.release-id }}
 
-  # TODO: VITE_ tokens need to be replaced after building, but before bundling the Tauri app
   build-tauri:
     name: Build Tauri app
     needs:
@@ -102,6 +73,42 @@ jobs:
 
       - name: Install npm dependencies
         run: npm install
+
+      # prepare static sites for config transformation upon later deployment
+      - name: Create .env file
+        run: |
+          sed -n 's/\(VITE_[A-Z0-9_]\+\)=\(.*\)/\1="{{\1}}"/p' .env.sample > .env
+          cat .env
+
+      - name: Substitute environment variables
+        run: |
+          # Configure static site transforms if provided
+          if [ ! -z "${{ env-vars-transforms }}" ]
+          then
+            readarray -t transforms <<<"${{ env-vars-transforms }}"
+            replacements=""
+            for i in "${!transforms[@]}"
+            do
+              trimmed="$(echo -e "${transforms[i]}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+              IFS=':' read -r placeholder value <<< "$trimmed"
+              if [ ! -z "$placeholder" ]
+              then
+              replacements+="s/{{$placeholder}}/$(echo $value | sed -e 's/\\/\\\\/g; s/\//\\\//g; s/&/\\\&/g')/gI;"
+              fi
+            done
+
+            if [ ! -z "$replacements" ]
+            then
+              sed -i "$replacements" .env;
+            fi
+          fi
+        env:
+          env-vars-transforms: |-
+            VITE_DISPENSER_AUTH0_DOMAIN:dispenser-prod.eu.auth0.com
+            VITE_DISPENSER_AUTH0_CLIENT_ID:Cg13HjvSV45pMme4dnK9yVJde8tVeDaM
+            VITE_DISPENSER_AUTH0_AUDIENCE:api-prod-dispenser-user
+            VITE_TESTNET_DISPENSER_API_URL:https://api.dispenser.algorandfoundation.tools
+            VITE_TESTNET_DISPENSER_ADDRESS:Z5GPJQCHVU54C2I4FLYNE2XHRQRL5OV2GPJQKXJFMW34CRIN2KRQFXF7DI
 
       - name: Build for Linux
         id: build-linux
