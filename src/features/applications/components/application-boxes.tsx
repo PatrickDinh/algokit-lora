@@ -30,7 +30,7 @@ const createTableColumns = (application: Application): ColumnDef<BoxDescriptor>[
     ...(application.appSpec
       ? [
           {
-            header: 'Decoded Name:',
+            header: 'Decoded Name',
             accessorFn: (item) => item,
             cell: (context) => {
               const boxDescriptor = context.getValue<BoxDescriptor>()
