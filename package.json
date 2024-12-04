@@ -195,6 +195,7 @@
     "ws@>7.0.0 <7.5.9": "7.5.10",
     "@algorandfoundation/algokit-utils@<7.0.0": "^7.0.0-beta.24",
     "path-to-regexp@>= 0.2.0 <8.0.0": "8.0.0",
-    "cross-spawn": "^7.0.6"
+    "cross-spawn": "^7.0.6",
+    "conventional-changelog-conventionalcommits": ">= 8.0.0"
   }
 }
