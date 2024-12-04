@@ -76,7 +76,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          sed -n 's/\(VITE_[A-Z0-9_]\+\)=\(.*\)/\1="{{\1}}"/p' .env.sample > .env
+          sed -E -n 's/(VITE_[A-Z0-9_]+)=(.*)/\1="{{\1}}"/p' .env.sample > .env
           cat .env
 
       - name: Substitute environment variables
