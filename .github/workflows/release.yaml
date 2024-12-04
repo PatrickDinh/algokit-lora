@@ -74,10 +74,10 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      # prepare static sites for config transformation upon later deployment
       - name: Create .env file
         run: |
           sed -n 's/\(VITE_[A-Z0-9_]\+\)=\(.*\)/\1="{{\1}}"/p' .env.sample > .env
+          cat .env
 
       - name: Substitute environment variables
         uses: bluwy/substitute-string-action@v3
@@ -90,6 +90,8 @@ jobs:
           VITE_TESTNET_DISPENSER_API_URL: https://api.dispenser.algorandfoundation.tools
           VITE_TESTNET_DISPENSER_ADDRESS: Z5GPJQCHVU54C2I4FLYNE2XHRQRL5OV2GPJQKXJFMW34CRIN2KRQFXF7DI
 
+      - name: debug
+        run: cat .env
 
       - name: Build for Linux
         id: build-linux
