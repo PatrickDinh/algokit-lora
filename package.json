@@ -108,7 +108,7 @@
     "@vitejs/plugin-react-swc": "^3.7.1",
     "autoprefixer": "^10.4.18",
     "better-npm-audit": "^3.7.3",
-    "conventional-changelog-conventionalcommits": "^7.0.2",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "cpy-cli": "^5.0.0",
     "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",
@@ -195,7 +195,6 @@
     "ws@>7.0.0 <7.5.9": "7.5.10",
     "@algorandfoundation/algokit-utils@<7.0.0": "^7.0.0-beta.24",
     "path-to-regexp@>= 0.2.0 <8.0.0": "8.0.0",
-    "cross-spawn": "^7.0.6",
-    "conventional-changelog-conventionalcommits": ">= 8.0.0"
+    "cross-spawn": "^7.0.6"
   }
 }
