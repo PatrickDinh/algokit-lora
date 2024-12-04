@@ -76,14 +76,14 @@ jobs:
 
       - name: Create .env file
         run: |
-          sed -E -n 's/(VITE_[A-Z0-9_]+)=(.*)/\1="{{\1}}"/p' .env.sample > .env
+          sed -E -n 's/(VITE_[A-Z0-9_]+)=(.*)/\1="%%\1%%"/p' .env.sample > .env
           cat .env
 
       - name: Substitute environment variables
         uses: bluwy/substitute-string-action@v3
         with:
           _input-file: '.env'
-          _format-key: '"{{key}}"'
+          _format-key: '%%key%%'
           VITE_DISPENSER_AUTH0_DOMAIN: dispenser-prod.eu.auth0.com
           VITE_DISPENSER_AUTH0_CLIENT_ID: Cg13HjvSV45pMme4dnK9yVJde8tVeDaM
           VITE_DISPENSER_AUTH0_AUDIENCE: api-prod-dispenser-user
