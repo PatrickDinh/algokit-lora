@@ -3,12 +3,7 @@ name: Release Web
 on:
   push:
     branches:
-      - main
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '.vscode/**'
-      - '.idea/**'
+      - none
 
 concurrency: deploy-to-production
 

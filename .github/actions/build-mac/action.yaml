@@ -6,11 +6,41 @@ inputs:
     required: true
   release-version:
     description: 'The release version'
+  apple-certificate:
+    description: 'The Apple certificate'
+    required: true
+  apple-certificate-password:
+    description: 'The Apple certificate password'
+    required: true
+  keychain-password:
+    description: 'The keychain password'
+    required: true
 
 runs:
   using: 'composite'
   steps:
-    #  TODO: set up signing certs here when releasing to production
+    - name: Import Apple Developer Certificate
+      env:
+        APPLE_CERTIFICATE: ${{ inputs.apple-certificate }}
+        APPLE_CERTIFICATE_PASSWORD: ${{ inputs.apple-certificate-password }}
+        KEYCHAIN_PASSWORD: ${{ inputs.keychain-password }}
+      shell: bash
+      run: |
+        echo $APPLE_CERTIFICATE | base64 --decode > certificate.p12
+        security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+        security default-keychain -s build.keychain
+        security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+        security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+        security find-identity -v -p codesigning build.keychain
+
+    - name: Verify Certificate
+      shell: bash
+      run: |
+        CERT_INFO=$(security find-identity -v -p codesigning build.keychain | grep "Apple Development")
+        CERT_ID=$(echo "$CERT_INFO" | awk -F'"' '{print $2}')
+        echo "CERT_ID=$CERT_ID" >> $GITHUB_ENV
+        echo "Certificate imported."
 
     - name: Get artifact name
       id: set-env
@@ -18,21 +48,21 @@ runs:
         echo "artifact_name=algokit-lora-mac-${{ runner.arch }}" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: Bump version in tauri.conf.json
-      if: ${{ inputs.release-version != '' }}
-      run: |
-        sed -i '' "s/\"version\": \"0.0.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
-      shell: bash
+    # - name: Bump version in tauri.conf.json
+    #   if: ${{ inputs.release-version != '' }}
+    #   run: |
+    #     sed -i '' "s/\"version\": \"0.0.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
+    #   shell: bash
 
-    - name: Build tauri app
-      run: |
-        npm run tauri build
-      shell: bash
+    # - name: Build tauri app
+    #   run: |
+    #     npm run tauri build
+    #   shell: bash
 
-    - name: Upload binary as artifact
-      id: upload-artifact
-      uses: actions/upload-artifact@v4
-      with:
-        if-no-files-found: error
-        name: ${{ steps.set-env.outputs.artifact_name }}
-        path: src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg
+    # - name: Upload binary as artifact
+    #   id: upload-artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     if-no-files-found: error
+    #     name: ${{ steps.set-env.outputs.artifact_name }}
+    #     path: src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg
