@@ -51,13 +51,17 @@ runs:
     - name: Bump version in tauri.conf.json
       if: ${{ inputs.release-version != '' }}
       run: |
-        sed -i '' "s/\"version\": \"0.0.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/\"version\": \"0.1.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
       shell: bash
 
     - name: Build tauri app
       run: |
         npm run tauri build
       shell: bash
+      env:
+        APPLE_CERTIFICATE: ${{ inputs.apple-certificate }}
+        APPLE_CERTIFICATE_PASSWORD: ${{ inputs.apple-certificate-password }}
+        APPLE_SIGNING_IDENTITY: ${{ env.CERT_ID }}
 
     - name: Upload binary as artifact
       id: upload-artifact
