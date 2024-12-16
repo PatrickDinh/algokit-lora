@@ -31,7 +31,7 @@ jobs:
     strategy:
       matrix:
         # macos-14 is the Apple Silicon M1 runner
-        platform: [ubuntu-22.04, windows-latest, 'macos-12', 'macos-14']
+        platform: ['macos-14']
 
     steps:
       - uses: actions/checkout@v4
