@@ -15,6 +15,15 @@ inputs:
   keychain-password:
     description: 'The keychain password'
     required: true
+  apple-id:
+    description: 'The Apple ID'
+    required: true
+  apple-password:
+    description: 'The Apple password'
+    required: true
+  apple-team-id:
+    description: 'The Apple team ID'
+    required: true
 
 runs:
   using: 'composite'
@@ -62,6 +71,9 @@ runs:
         APPLE_CERTIFICATE: ${{ inputs.apple-certificate }}
         APPLE_CERTIFICATE_PASSWORD: ${{ inputs.apple-certificate-password }}
         APPLE_SIGNING_IDENTITY: ${{ env.CERT_ID }}
+        APPLE_ID: ${{ inputs.apple-id }}
+        APPLE_PASSWORD: ${{ inputs.apple-password }}
+        APPLE_TEAM_ID: ${{ inputs.apple-team-id }}
 
     - name: Upload binary as artifact
       id: upload-artifact
