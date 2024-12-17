@@ -41,7 +41,7 @@ jobs:
         id: create-release-action
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          production-release: true
+          production-release: 'true'
           node-version: 20
 
       - name: Create draft CrabNebula release
