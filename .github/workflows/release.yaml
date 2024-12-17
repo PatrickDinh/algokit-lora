@@ -115,3 +115,5 @@ jobs:
           apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
           tauri-signing-private-key: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           tauri-signing-private-key-password: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          crabnebula-application: ${{ env.CN_APPLICATION }}
+          crabnebula-api-key: ${{ secrets.CN_API_KEY }}

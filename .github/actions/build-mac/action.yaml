@@ -30,6 +30,12 @@ inputs:
   tauri-signing-private-key-password:
     description: 'The Tauri signing private key password'
     required: true
+  crabnebula-application:
+    description: 'The CrabNebula application'
+    required: true
+  crabnebula-api-key:
+    description: 'The CrabNebula API key'
+    required: true
 
 runs:
   using: 'composite'
@@ -90,3 +96,10 @@ runs:
         if-no-files-found: error
         name: ${{ steps.set-env.outputs.artifact_name }}
         path: src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg
+
+    - name: Upload binary to CrabNebula
+      uses: crabnebula-dev/cloud-release@v0
+      with:
+        command: release upload ${{ inputs.crabnebula-application }} --framework tauri
+        api-key: ${{ inputs.crabnebula-api-key }}
+        path: ./src-tauri
