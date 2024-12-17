@@ -7,7 +7,7 @@ import { Label } from '@/features/common/components/label'
 import { useLiveExplorer } from '@/features/explore/data/live-explorer'
 import { useTitle } from '@/utils/use-title'
 
-export const explorePageTitle = 'Explore 1'
+export const explorePageTitle = 'Explore 2'
 
 export function ExplorePage() {
   const { showLiveUpdates, setShowLiveUpdates, latestTransactions, latestBlocks } = useLiveExplorer()

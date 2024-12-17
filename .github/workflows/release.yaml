@@ -44,7 +44,7 @@ jobs:
           production-release: true
           node-version: 20
 
-      - name: create draft CrabNebula release
+      - name: Create draft CrabNebula release
         uses: crabnebula-dev/cloud-release@v0.2.0
         if: ${{ steps.create-release-action.outputs.release-published == 'true' }}
         with:
