@@ -24,6 +24,12 @@ inputs:
   apple-team-id:
     description: 'The Apple team ID'
     required: true
+  tauri-signing-private-key:
+    description: 'The Tauri signing private key'
+    required: true
+  tauri-signing-private-key-password:
+    description: 'The Tauri signing private key password'
+    required: true
 
 runs:
   using: 'composite'
@@ -74,6 +80,8 @@ runs:
         APPLE_ID: ${{ inputs.apple-id }}
         APPLE_PASSWORD: ${{ inputs.apple-password }}
         APPLE_TEAM_ID: ${{ inputs.apple-team-id }}
+        TAURI_SIGNING_PRIVATE_KEY: ${{ inputs.tauri-signing-private-key }}
+        TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ inputs.tauri-signing-private-key-password }}
 
     - name: Upload binary as artifact
       id: upload-artifact
