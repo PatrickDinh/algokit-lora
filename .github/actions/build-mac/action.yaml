@@ -1,9 +1,6 @@
 name: 'Build for Mac'
 description: 'Build for Mac'
 inputs:
-  production-release:
-    description: 'Production release?'
-    required: true
   release-version:
     description: 'The release version'
   apple-certificate:

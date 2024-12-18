@@ -9,12 +9,12 @@ on:
       - '**.md'
       - '.vscode/**'
       - '.idea/**'
-  # workflow_dispatch:
-  #   inputs:
-  #     production-release:
-  #       description: 'Production release?'
-  #       required: true
-  #       default: 'true'
+  workflow_dispatch:
+    inputs:
+      production-release:
+        description: 'Production release?'
+        required: true
+        default: 'true'
 
 concurrency: create-release
 
@@ -23,6 +23,9 @@ permissions:
   issues: write # to be able to comment on released issues
   pull-requests: write # to be able to comment on released pull requests
   packages: read
+
+env:
+  PRODUCTION_RELEASE: ${{ github.ref_name == 'main' && inputs.production-release == 'true' }}
 
 jobs:
   create-release:
@@ -38,14 +41,14 @@ jobs:
         id: create-release-action
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          production-release: 'true'
+          production-release: ${{ env.PRODUCTION_RELEASE }}
           node-version: 20
 
       - name: Create draft CrabNebula release
         uses: crabnebula-dev/cloud-release@v0.2.0
         if: ${{ steps.create-release-action.outputs.release-published == 'true' }}
         with:
-          command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-release-action.outputs.release-version }}
+          command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-release-action.outputs.release-version }} ${{ env.PRODUCTION_RELEASE && '' || '--channel beta' }}
           api-key: ${{ secrets.CN_API_KEY }}
 
     outputs:
@@ -97,22 +100,21 @@ jobs:
           VITE_TESTNET_DISPENSER_API_URL: https://api.dispenser.algorandfoundation.tools
           VITE_TESTNET_DISPENSER_ADDRESS: Z5GPJQCHVU54C2I4FLYNE2XHRQRL5OV2GPJQKXJFMW34CRIN2KRQFXF7DI
 
-      - name: Build for Mac
-        id: build-mac
-        if: ${{ runner.os == 'macOS' }}
-        uses: ./.github/actions/build-mac
-        with:
-          production-release: true
-          release-version: ${{ needs.create-release.outputs.release-version }}
-          apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
-          apple-certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
-          apple-id: ${{ secrets.APPLE_ID }}
-          apple-password: ${{ secrets.APPLE_PASSWORD }}
-          apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
-          tauri-signing-public-key: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
-          tauri-signing-private-key: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          tauri-signing-private-key-password: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-          crabnebula-org-name: ${{ secrets.CN_ORG_NAME }}
-          crabnebula-app-name: ${{ secrets.CN_APP_NAME }}
-          crabnebula-api-key: ${{ secrets.CN_API_KEY }}
+      # - name: Build for Mac
+      #   id: build-mac
+      #   if: ${{ runner.os == 'macOS' }}
+      #   uses: ./.github/actions/build-mac
+      #   with:
+      #     release-version: ${{ needs.create-release.outputs.release-version }}
+      #     apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
+      #     apple-certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+      #     keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+      #     apple-id: ${{ secrets.APPLE_ID }}
+      #     apple-password: ${{ secrets.APPLE_PASSWORD }}
+      #     apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+      #     tauri-signing-public-key: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
+      #     tauri-signing-private-key: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      #     tauri-signing-private-key-password: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+      #     crabnebula-org-name: ${{ secrets.CN_ORG_NAME }}
+      #     crabnebula-app-name: ${{ secrets.CN_APP_NAME }}
+      #     crabnebula-api-key: ${{ secrets.CN_API_KEY }}
