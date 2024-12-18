@@ -59,7 +59,7 @@ jobs:
       - name: Upload assets to CrabNebula
         uses: crabnebula-dev/cloud-release@v0.2.0
         with:
-          command: release upload ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} 01JFDXXSVW98SY186VYGKVVTMN --file "README.md"
+          command: release upload "patrick-dev/algokit-lora-dev" "01JFDXXSVW98SY186VYGKVVTMN" --file "README.md"
           api-key: ${{ secrets.CN_API_KEY }}
     outputs:
       release-published: ${{ steps.create-github-release.outputs.release-published }}
