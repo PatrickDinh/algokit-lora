@@ -56,6 +56,9 @@ jobs:
         id: get-crabnebula-release-id
         run: echo "release-id=${{ fromJson(steps.create-crabnebula-release.outputs.stdout).id }}" >> $GITHUB_OUTPUT
 
+      - name: Debug
+        run: ls
+
       - name: Upload assets to CrabNebula
         uses: crabnebula-dev/cloud-release@v0.2.0
         with:
