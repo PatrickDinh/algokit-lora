@@ -112,7 +112,7 @@ jobs:
         uses: ./.github/actions/build-mac
         with:
           release-version: ${{ needs.create-release.outputs.release-version }}
-          crabnebula-release-channel: ${{ env.PRODUCTION_RELEASE != 'true' && 'beta' || '' }}
+          crabnebula-release-channel: ${{ env.PRODUCTION_RELEASE == 'true' && 'stable' || 'beta' }}
           crabnebula-release-id: ${{ needs.create-release.outputs.crabnebula-release-id }}
           apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
           apple-certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
