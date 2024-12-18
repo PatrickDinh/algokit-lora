@@ -33,8 +33,11 @@ inputs:
   tauri-signing-public-key:
     description: 'The Tauri signing public key'
     required: true
-  crabnebula-application:
-    description: 'The CrabNebula application'
+  crabnebula-org-name:
+    description: 'The CrabNebula org name'
+    required: true
+  crabnebula-app-name:
+    description: 'The CrabNebula app name'
     required: true
   crabnebula-api-key:
     description: 'The CrabNebula API key'
@@ -76,7 +79,8 @@ runs:
       if: ${{ inputs.release-version != '' }}
       run: |
         sed -i '' "s/\"version\": \"0.1.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
-        sed -i '' "s/\CN_APPLICATION/${{ inputs.crabnebula-application }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/\CN_ORG_NAME/${{ inputs.crabnebula-org-name }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/\CN_APP_NAME/${{ inputs.crabnebula-app-name }}/g" "src-tauri/tauri.conf.json"
         sed -i '' "s/\TAURI_SIGNING_PUBLIC_KEY\${{ inputs.tauri-signing-public-key }}/g" "src-tauri/tauri.conf.json"
       shell: bash
 
@@ -105,6 +109,6 @@ runs:
     - name: Upload binary to CrabNebula
       uses: crabnebula-dev/cloud-release@v0
       with:
-        command: release upload ${{ inputs.crabnebula-application }} --framework tauri
+        command: release upload ${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }} --framework tauri
         api-key: ${{ inputs.crabnebula-api-key }}
         path: ./src-tauri

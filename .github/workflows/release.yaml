@@ -24,9 +24,6 @@ permissions:
   pull-requests: write # to be able to comment on released pull requests
   packages: read
 
-env:
-  CN_APPLICATION: '${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }}'
-
 jobs:
   create-release:
     runs-on: [ubuntu-20.04]
@@ -48,7 +45,7 @@ jobs:
         uses: crabnebula-dev/cloud-release@v0.2.0
         if: ${{ steps.create-release-action.outputs.release-published == 'true' }}
         with:
-          command: release draft ${{ env.CN_APPLICATION }} ${{ steps.create-release-action.outputs.release-version }}
+          command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-release-action.outputs.release-version }}
           api-key: ${{ secrets.CN_API_KEY }}
 
     outputs:
@@ -116,5 +113,6 @@ jobs:
           tauri-signing-public-key: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
           tauri-signing-private-key: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           tauri-signing-private-key-password: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-          crabnebula-application: ${{ env.CN_APPLICATION }}
+          crabnebula-org-name: ${{ secrets.CN_ORG_NAME }}
+          crabnebula-app-name: ${{ secrets.CN_APP_NAME }}
           crabnebula-api-key: ${{ secrets.CN_API_KEY }}
