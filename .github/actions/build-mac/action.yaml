@@ -30,6 +30,9 @@ inputs:
   tauri-signing-private-key-password:
     description: 'The Tauri signing private key password'
     required: true
+  tauri-signing-public-key:
+    description: 'The Tauri signing public key'
+    required: true
   crabnebula-application:
     description: 'The CrabNebula application'
     required: true
@@ -73,6 +76,8 @@ runs:
       if: ${{ inputs.release-version != '' }}
       run: |
         sed -i '' "s/\"version\": \"0.1.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/\CN_APPLICATION/${{ inputs.crabnebula-application }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/\TAURI_SIGNING_PUBLIC_KEY\${{ inputs.tauri-signing-public-key }}/g" "src-tauri/tauri.conf.json"
       shell: bash
 
     - name: Build tauri app
