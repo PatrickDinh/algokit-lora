@@ -3,6 +3,10 @@ description: 'Build for Mac'
 inputs:
   release-version:
     description: 'The release version'
+    required: true
+  crabnebula-release-id:
+    description: 'The CrabNebula release ID'
+    required: true
   apple-certificate:
     description: 'The Apple certificate'
     required: true
@@ -107,6 +111,6 @@ runs:
     - name: Upload binary to CrabNebula
       uses: crabnebula-dev/cloud-release@v0
       with:
-        command: release upload ${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }} ${{ inputs.release-version }} --file ${{ steps.set-env.outputs.artifact_path }}
+        command: release upload ${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }} ${{ inputs.crabnebula-release-id }} --file ${{ steps.set-env.outputs.artifact_path }}
         api-key: ${{ inputs.crabnebula-api-key }}
         path: ./src-tauri
