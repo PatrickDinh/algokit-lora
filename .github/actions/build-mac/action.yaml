@@ -79,9 +79,9 @@ runs:
       if: ${{ inputs.release-version != '' }}
       run: |
         sed -i '' "s/\"version\": \"0.1.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
-        sed -i '' "s/\CN_ORG_NAME/${{ inputs.crabnebula-org-name }}/g" "src-tauri/tauri.conf.json"
-        sed -i '' "s/\CN_APP_NAME/${{ inputs.crabnebula-app-name }}/g" "src-tauri/tauri.conf.json"
-        sed -i '' "s/\TAURI_SIGNING_PUBLIC_KEY\${{ inputs.tauri-signing-public-key }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/CN_ORG_NAME/${{ inputs.crabnebula-org-name }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/CN_APP_NAME/${{ inputs.crabnebula-app-name }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/TAURI_SIGNING_PUBLIC_KEY/${{ inputs.tauri-signing-public-key }}/g" "src-tauri/tauri.conf.json"
       shell: bash
 
     - name: Build tauri app
