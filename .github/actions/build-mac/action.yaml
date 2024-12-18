@@ -79,8 +79,13 @@ runs:
         sed -i '' "s/\"version\": \"0.1.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
         sed -i '' "s/CN_ORG_NAME/${{ inputs.crabnebula-org-name }}/g" "src-tauri/tauri.conf.json"
         sed -i '' "s/CN_APP_NAME/${{ inputs.crabnebula-app-name }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/CN_CHANNEL/${{ inputs.crabnebula-release-channel }}/g" "src-tauri/tauri.conf.json"
         sed -i '' "s/TAURI_SIGNING_PUBLIC_KEY/${{ inputs.tauri-signing-public-key }}/g" "src-tauri/tauri.conf.json"
       shell: bash
+
+    - name: Debug tauri.conf.json
+      run: |
+        cat src-tauri/tauri.conf.json
 
     - name: Build tauri app
       run: |

@@ -49,7 +49,7 @@ jobs:
         id: create-crabnebula-release
         if: ${{ steps.create-github-release.outputs.release-published == 'true' }}
         with:
-          command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-github-release.outputs.release-version }} ${{ env.PRODUCTION_RELEASE != 'true' && '--channel beta' || '' }}
+          command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-github-release.outputs.release-version }} --channel ${{ env.PRODUCTION_RELEASE == 'true' && 'stable' || 'beta' }}
           api-key: ${{ secrets.CN_API_KEY }}
 
       - name: Get CrabNebula release ID
@@ -130,5 +130,5 @@ jobs:
       - name: Publish CrabNebula release
         uses: crabnebula-dev/cloud-release@v0.2.0
         with:
-          command: release publish "${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }}" "${{ needs.create-release.outputs.crabnebula-release-id }}" --channel ${{ env.PRODUCTION_RELEASE != 'true' && 'beta' || '' }}
+          command: release publish "${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }}" "${{ needs.create-release.outputs.crabnebula-release-id }}" --channel ${{ env.PRODUCTION_RELEASE == 'true' && 'stable' || 'beta' }}
           api-key: ${{ secrets.CN_API_KEY }}
