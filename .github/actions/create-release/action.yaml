@@ -41,21 +41,14 @@ runs:
       id: get-next-version
       run: npx semantic-release --dry-run
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }} ${{ inputs.production-release == 'true' && '--branches main' || '' }}
       shell: bash
 
-    - name: Create release - beta
-      if: ${{ inputs.production-release != 'true' }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-      run: 'npx semantic-release'
-      shell: bash
-
-    - name: Create release
+    - name: Create release ${{ inputs.production-release == 'true' && '' || 'beta' }}
       if: ${{ inputs.production-release == 'true' }}
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-      run: 'npx semantic-release --branches main'
+      run: npx semantic-release ${{ inputs.production-release == 'true' && '--branches main' || '' }}
       shell: bash
 
     - name: Get release ID
