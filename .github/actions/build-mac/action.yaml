@@ -86,6 +86,7 @@ runs:
     - name: Debug tauri.conf.json
       run: |
         cat src-tauri/tauri.conf.json
+      shell: bash
 
     - name: Build tauri app
       run: |
