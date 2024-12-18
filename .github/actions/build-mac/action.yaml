@@ -7,6 +7,9 @@ inputs:
   crabnebula-release-id:
     description: 'The CrabNebula release ID'
     required: true
+  crabnebula-release-channel:
+    description: 'The CrabNebula release channel'
+    required: true
   apple-certificate:
     description: 'The Apple certificate'
     required: true
@@ -109,9 +112,8 @@ runs:
     #     path: ${{ steps.set-env.outputs.artifact_path }}
 
     - name: Upload assets to CrabNebula
-      uses: crabnebula-dev/cloud-release@v0
+      uses: crabnebula-dev/cloud-release@v0.2.0
       with:
         # command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file ${{ steps.set-env.outputs.artifact_path }}
-        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file "README.md"
+        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file "README.md" --channel "${{ inputs.crabnebula-release-channel }}"
         api-key: ${{ inputs.crabnebula-api-key }}
-        path: ./src-tauri

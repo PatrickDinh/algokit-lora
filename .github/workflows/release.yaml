@@ -56,14 +56,6 @@ jobs:
         id: get-crabnebula-release-id
         run: echo "release-id=${{ fromJson(steps.create-crabnebula-release.outputs.stdout).id }}" >> $GITHUB_OUTPUT
 
-      - name: Debug
-        run: ls
-
-      - name: Upload assets to CrabNebula
-        uses: crabnebula-dev/cloud-release@v0.2.0
-        with:
-          command: release upload "patrick-dev/algokit-lora-dev" "01JFDXXSVW98SY186VYGKVVTMN" --file "./README.md"
-          api-key: ${{ secrets.CN_API_KEY }}
     outputs:
       release-published: ${{ steps.create-github-release.outputs.release-published }}
       release-version: ${{ steps.create-github-release.outputs.release-version }}
@@ -120,6 +112,7 @@ jobs:
         uses: ./.github/actions/build-mac
         with:
           release-version: ${{ needs.create-release.outputs.release-version }}
+          crabnebula-release-channel: ${{ env.PRODUCTION_RELEASE != 'true' && 'beta' || '' }}
           crabnebula-release-id: ${{ needs.create-release.outputs.crabnebula-release-id }}
           apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
           apple-certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
