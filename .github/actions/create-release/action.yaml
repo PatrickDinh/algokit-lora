@@ -45,7 +45,6 @@ runs:
       shell: bash
 
     - name: Create release ${{ inputs.production-release == 'true' && '' || 'beta' }}
-      if: ${{ inputs.production-release == 'true' }}
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
       run: npx semantic-release ${{ inputs.production-release == 'true' && '--branches main' || '' }}
