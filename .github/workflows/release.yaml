@@ -53,11 +53,11 @@ jobs:
           api-key: ${{ secrets.CN_API_KEY }}
 
       - name: Debug
-        run: echo "foo=${{ toJson(steps.create-crabnebula-release.outputs.stdout) }}"
+        run: echo "foo=${{ steps.create-crabnebula-release.outputs.stdout }}"
 
       - name: Get CrabNebula release ID
         id: get-crabnebula-release-id
-        run: echo "release-id=${{ fromJson(steps.create-crabnebula-release.outputs).id }}" >> $GITHUB_OUTPUT
+        run: echo "release-id=${{ fromJson(steps.create-crabnebula-release.outputs.stdout).id }}" >> $GITHUB_OUTPUT
 
     outputs:
       release-published: ${{ steps.create-github-release.outputs.release-published }}
