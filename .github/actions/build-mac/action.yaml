@@ -66,12 +66,6 @@ runs:
         echo "CERT_ID=$CERT_ID" >> $GITHUB_ENV
         echo "Certificate imported."
 
-    - name: Get artifact name
-      id: set-env
-      run: |
-        echo "artifact_name=algokit-lora-mac-${{ runner.arch }}" >> $GITHUB_OUTPUT
-      shell: bash
-
     - name: Bump version in tauri.conf.json
       if: ${{ inputs.release-version != '' }}
       run: |
@@ -95,17 +89,24 @@ runs:
         TAURI_SIGNING_PRIVATE_KEY: ${{ inputs.tauri-signing-private-key }}
         TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ inputs.tauri-signing-private-key-password }}
 
+    - name: Set env
+      id: set-env
+      run: |
+        echo "artifact_name=algokit-lora-mac-${{ runner.arch }}" >> $GITHUB_OUTPUT
+        echo "artifact_path=$(ls src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg)" >> $GITHUB_OUTPUT
+      shell: bash
+
     - name: Upload binary as artifact
       id: upload-artifact
       uses: actions/upload-artifact@v4
       with:
         if-no-files-found: error
         name: ${{ steps.set-env.outputs.artifact_name }}
-        path: src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg
+        path: ${{ steps.set-env.outputs.artifact_path }}
 
     - name: Upload binary to CrabNebula
       uses: crabnebula-dev/cloud-release@v0
       with:
-        command: release upload ${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }} --framework tauri
+        command: release upload ${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }} --framework tauri --file ${{ steps.set-env.outputs.artifact_path }}
         api-key: ${{ inputs.crabnebula-api-key }}
         path: ./src-tauri
