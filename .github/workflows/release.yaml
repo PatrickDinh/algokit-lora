@@ -53,7 +53,7 @@ jobs:
           api-key: ${{ secrets.CN_API_KEY }}
 
       - name: Debug
-        run: echo "foo=${{ steps.create-crabnebula-release.outputs.id }}"
+        run: echo "foo=${{ steps.create-crabnebula-release.outputs }}"
 
       - name: Get CrabNebula release ID
         id: get-crabnebula-release-id
