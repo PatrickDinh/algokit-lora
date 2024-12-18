@@ -56,6 +56,11 @@ jobs:
         id: get-crabnebula-release-id
         run: echo "release-id=${{ fromJson(steps.create-crabnebula-release.outputs.stdout).id }}" >> $GITHUB_OUTPUT
 
+      - name: Upload assets to CrabNebula
+        uses: crabnebula-dev/cloud-release@v0
+        with:
+          command: release upload ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} "${{ steps.get-crabnebula-release-id.outputs.release-id }}" --file "README.md"
+          api-key: ${{ secrets.CN_API_KEY }}
     outputs:
       release-published: ${{ steps.create-github-release.outputs.release-published }}
       release-version: ${{ steps.create-github-release.outputs.release-version }}
