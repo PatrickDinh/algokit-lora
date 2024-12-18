@@ -52,6 +52,9 @@ jobs:
           command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-github-release.outputs.release-version }} ${{ env.PRODUCTION_RELEASE != 'true' && '--channel beta' || '' }}
           api-key: ${{ secrets.CN_API_KEY }}
 
+      - name: Debug
+        run: echo "foo=${{ steps.create-crabnebula-release.outputs.id }}"
+
       - name: Get CrabNebula release ID
         id: get-crabnebula-release-id
         run: echo "release-id=${{ fromJson(steps.create-crabnebula-release.outputs).id }}" >> $GITHUB_OUTPUT
