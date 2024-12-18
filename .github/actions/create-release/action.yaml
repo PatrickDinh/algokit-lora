@@ -39,9 +39,9 @@ runs:
 
     - name: Get next version (dry run)
       id: get-next-version
-      run: npx semantic-release --dry-run
+      run: npx semantic-release --dry-run ${{ inputs.production-release == 'true' && '--branches main' || '' }}
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }} ${{ inputs.production-release == 'true' && '--branches main' || '' }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       shell: bash
 
     - name: Create release ${{ inputs.production-release == 'true' && '' || 'beta' }}
