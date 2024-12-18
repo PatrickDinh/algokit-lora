@@ -48,7 +48,7 @@ jobs:
         uses: crabnebula-dev/cloud-release@v0.2.0
         if: ${{ steps.create-release-action.outputs.release-published == 'true' }}
         with:
-          command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-release-action.outputs.release-version }} ${{ env.PRODUCTION_RELEASE && '' || '--channel beta' }}
+          command: release draft ${{ secrets.CN_ORG_NAME }}/${{ secrets.CN_APP_NAME }} ${{ steps.create-release-action.outputs.release-version }} ${{ env.PRODUCTION_RELEASE == 'true' && '' || '--channel beta' }}
           api-key: ${{ secrets.CN_API_KEY }}
 
     outputs:
