@@ -123,9 +123,9 @@ runs:
     - name: Set env
       id: set-env
       run: |
-        echo "artifact_name=algokit-lora-windows-${{ runner.arch }}" >> $GITHUB_OUTPUT
-        echo "artifact_path=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $GITHUB_OUTPUT
-      shell: bash
+        echo "artifact_name=algokit-lora-windows-${{ runner.arch }}" >> $env:$GITHUB_OUTPUT
+        echo "artifact_path=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $env:$GITHUB_OUTPUT
+      shell: pwsh
 
     - name: Upload installer artifact
       uses: actions/upload-artifact@v4
