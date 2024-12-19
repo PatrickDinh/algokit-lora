@@ -83,11 +83,6 @@ runs:
         sed -i '' "s/TAURI_SIGNING_PUBLIC_KEY/${{ inputs.tauri-signing-public-key }}/g" "src-tauri/tauri.conf.json"
       shell: bash
 
-    - name: Debug tauri.conf.json
-      run: |
-        cat src-tauri/tauri.conf.json
-      shell: bash
-
     - name: Build tauri app
       run: |
         npm run tauri build
