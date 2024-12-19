@@ -121,21 +121,34 @@ runs:
     #     timestamp-digest: SHA256
 
     - name: Set env
-      id: set-env
       run: |
-        echo "artifact_name=algokit-lora-windows-${{ runner.arch }}" >> $GITHUB_OUTPUT
-        echo "artifact_path=$(ls ${{ github.workspace }}/src-tauri/target/release/bundle/msi/algokit-lora*.msi)" >> $GITHUB_OUTPUT
-      shell: bash
+        echo "ARTIFACT_NAME=algokit-lora-windows-${{ runner.arch }}" >> $env:GITHUB_ENV
+        echo "ARTIFACT_PATH=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $env:GITHUB_ENV
+      shell: pwsh
 
     - name: Upload installer artifact
       uses: actions/upload-artifact@v4
       with:
         if-no-files-found: error
-        name: ${{ steps.set-env.outputs.artifact_name }}
-        path: ${{ steps.set-env.outputs.artifact_path }}
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACT_PATH }}
+
+    - name: Adjust artifacts path for softprops/action-gh-release and crabnebula-dev/cloud-release
+      shell: pwsh
+      run: |
+        $adjusted = '${{ env.ARTIFACT_PATH }}' -replace '\\','/'
+        echo "ARTIFACT_PATH=$adjusted" >> $env:GITHUB_ENV
+
+    - name: Append artifacts to release
+      uses: softprops/action-gh-release@v1
+      with:
+        fail_on_unmatched_files: true
+        files: ${{ env.ARTIFACT_PATH }}
+        name: ${{ inputs.release-version }}
+        prerelease: ${{ inputs.production-release != 'true' }}
 
     - name: Upload assets to CrabNebula
       uses: crabnebula-dev/cloud-release@v0.2.0
       with:
-        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file ${{ steps.set-env.outputs.artifact_path }} ${{ inputs.production-release != 'true' && '--channel beta' || '' }}
+        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file ${{ env.ARTIFACT_PATH }} ${{ inputs.production-release != 'true' && '--channel beta' || '' }}
         api-key: ${{ inputs.crabnebula-api-key }}
