@@ -44,7 +44,8 @@ runs:
     - name: Setup tauri.conf.json
       if: ${{ inputs.release-version != '' }}
       run: |
-        version="${${{ inputs.release-version }}/beta./""}"
+        input_version="${{ inputs.release-version }}"
+        version="${input_version/beta./""}"
         sed -i "s/\"version\": \"0.1.0\"/\"version\": \"$version\"/g" "src-tauri/tauri.conf.json"
         sed -i "s/CN_ORG_NAME/${{ inputs.crabnebula-org-name }}/g" "src-tauri/tauri.conf.json"
         sed -i "s/CN_APP_NAME/${{ inputs.crabnebula-app-name }}/g" "src-tauri/tauri.conf.json"
