@@ -54,6 +54,7 @@ jobs:
 
       - name: Get CrabNebula release ID
         id: get-crabnebula-release-id
+        if: ${{ steps.create-github-release.outputs.release-published == 'true' }}
         run: echo "release-id=${{ fromJson(steps.create-crabnebula-release.outputs.stdout).id }}" >> $GITHUB_OUTPUT
 
     outputs:

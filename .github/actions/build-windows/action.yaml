@@ -133,6 +133,7 @@ runs:
         name: ${{ env.ARTIFACT_NAME }}
         path: ${{ env.ARTIFACT_PATH }}
 
+    # softprops/action-gh-release and crabnebula-dev/cloud-release don't support the \ character in paths
     - name: Adjust artifacts path for softprops/action-gh-release and crabnebula-dev/cloud-release
       shell: pwsh
       run: |
