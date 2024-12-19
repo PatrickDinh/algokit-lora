@@ -7,6 +7,9 @@ inputs:
   release-version:
     description: 'The release version'
     required: true
+  release-tag:
+    description: 'The release tag'
+    required: true
   crabnebula-release-id:
     description: 'The CrabNebula release ID'
     required: true

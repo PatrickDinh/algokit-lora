@@ -113,6 +113,7 @@ jobs:
         uses: ./.github/actions/build-windows
         with:
           release-version: ${{ needs.create-release.outputs.release-version }}
+          release-tag: ${{ needs.create-release.outputs.release-tag }}
           production-release: ${{ env.PRODUCTION_RELEASE  }}
           crabnebula-release-id: ${{ needs.create-release.outputs.crabnebula-release-id }}
           package_name: algokit-lora
@@ -132,6 +133,7 @@ jobs:
         uses: ./.github/actions/build-mac
         with:
           release-version: ${{ needs.create-release.outputs.release-version }}
+          release-tag: ${{ needs.create-release.outputs.release-tag }}
           production-release: ${{ env.PRODUCTION_RELEASE  }}
           crabnebula-release-id: ${{ needs.create-release.outputs.crabnebula-release-id }}
           apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
