@@ -115,5 +115,5 @@ runs:
     - name: Upload assets to CrabNebula
       uses: crabnebula-dev/cloud-release@v0.2.0
       with:
-        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --framework tauri --channel "${{ inputs.crabnebula-release-channel }}"
+        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --framework tauri ${{ inputs.production-release != 'true' && '--channel beta' || '' }}
         api-key: ${{ inputs.crabnebula-api-key }}

@@ -123,9 +123,9 @@ runs:
     - name: Set env
       id: set-env
       run: |
-        echo "artifact_name=algokit-lora-windows-${{ runner.arch }}" >> $env:GITHUB_OUTPUT
-        echo "artifact_path=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $env:GITHUB_OUTPUT
-      shell: pwsh
+        echo "artifact_name=algokit-lora-windows-${{ runner.arch }}" >> $GITHUB_OUTPUT
+        echo "artifact_path=$(ls ${{ github.workspace }}/src-tauri/target/release/bundle/msi/algokit-lora*.msi)" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Upload installer artifact
       uses: actions/upload-artifact@v4
@@ -137,5 +137,5 @@ runs:
     - name: Upload assets to CrabNebula
       uses: crabnebula-dev/cloud-release@v0.2.0
       with:
-        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file ${{ steps.set-env.outputs.artifact_path }} --channel "${{ inputs.crabnebula-release-channel }}"
+        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file ${{ steps.set-env.outputs.artifact_path }} ${{ inputs.production-release != 'true' && '--channel beta' || '' }}
         api-key: ${{ inputs.crabnebula-api-key }}
