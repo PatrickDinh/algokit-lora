@@ -73,7 +73,7 @@ runs:
         echo "CERT_ID=$CERT_ID" >> $GITHUB_ENV
         echo "Certificate imported."
 
-    - name: Bump version in tauri.conf.json
+    - name: Setup tauri.conf.json
       if: ${{ inputs.release-version != '' }}
       run: |
         sed -i '' "s/\"version\": \"0.1.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
