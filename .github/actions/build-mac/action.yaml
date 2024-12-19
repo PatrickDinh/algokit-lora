@@ -1,14 +1,14 @@
 name: 'Build for Mac'
 description: 'Build for Mac'
 inputs:
+  production-release:
+    description: 'Whether this is a production release'
+    required: true
   release-version:
     description: 'The release version'
     required: true
   crabnebula-release-id:
     description: 'The CrabNebula release ID'
-    required: true
-  crabnebula-release-channel:
-    description: 'The CrabNebula release channel'
     required: true
   apple-certificate:
     description: 'The Apple certificate'
@@ -79,7 +79,7 @@ runs:
         sed -i '' "s/\"version\": \"0.1.0\"/\"version\": \"${{ inputs.release-version }}\"/g" "src-tauri/tauri.conf.json"
         sed -i '' "s/CN_ORG_NAME/${{ inputs.crabnebula-org-name }}/g" "src-tauri/tauri.conf.json"
         sed -i '' "s/CN_APP_NAME/${{ inputs.crabnebula-app-name }}/g" "src-tauri/tauri.conf.json"
-        sed -i '' "s/CN_CHANNEL/${{ inputs.crabnebula-release-channel }}/g" "src-tauri/tauri.conf.json"
+        sed -i '' "s/CN_CHANNEL/${{ inputs.production-release != 'true' && '?channel=beta' || '' }}/g" "src-tauri/tauri.conf.json"
         sed -i '' "s/TAURI_SIGNING_PUBLIC_KEY/${{ inputs.tauri-signing-public-key }}/g" "src-tauri/tauri.conf.json"
       shell: bash
 
@@ -115,5 +115,5 @@ runs:
     - name: Upload assets to CrabNebula
       uses: crabnebula-dev/cloud-release@v0.2.0
       with:
-        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --file ${{ steps.set-env.outputs.artifact_path }} --channel "${{ inputs.crabnebula-release-channel }}"
+        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --framework tauri --channel "${{ inputs.crabnebula-release-channel }}"
         api-key: ${{ inputs.crabnebula-api-key }}

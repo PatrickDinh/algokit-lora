@@ -46,7 +46,7 @@
     },
     "updater": {
       "endpoints": [
-        "https://cdn.crabnebula.app/update/CN_ORG_NAME/CN_APP_NAME/{{target}}-{{arch}}/{{current_version}}?channel=CN_CHANNEL"
+        "https://cdn.crabnebula.app/update/CN_ORG_NAME/CN_APP_NAME/{{target}}-{{arch}}/{{current_version}}CN_CHANNEL"
       ],
       "pubkey": "TAURI_SIGNING_PUBLIC_KEY"
     }
