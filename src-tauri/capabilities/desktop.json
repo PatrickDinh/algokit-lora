@@ -8,10 +8,5 @@
   "windows": [
     "main"
   ],
-  "permissions": [
-    "dialog:default",
-    "updater:default",
-    "process:default",
-    "process:allow-restart"
-  ]
+  "permissions": []
 }

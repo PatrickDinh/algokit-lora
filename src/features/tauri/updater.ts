@@ -1,18 +1,16 @@
-import { check } from '@tauri-apps/plugin-updater'
+import { check, Update } from '@tauri-apps/plugin-updater'
 import { ask } from '@tauri-apps/plugin-dialog'
 import { relaunch } from '@tauri-apps/plugin-process'
 
 export async function checkForAppUpdates() {
   const update = await check()
 
-  if (update?.available) {
+  if (update && needUpdate(update)) {
     const yes = await ask(
-      `
-Update to ${update.version} is available!
-Release notes: ${update.body}
-        `,
+      `A newer version is available.
+The current version is ${update.currentVersion}, new version is ${update.version}`,
       {
-        title: 'Update Now!',
+        title: 'New version available',
         kind: 'info',
         okLabel: 'Update',
         cancelLabel: 'Cancel',
@@ -24,4 +22,10 @@ Release notes: ${update.body}
       await relaunch()
     }
   }
+}
+
+const needUpdate = (update: Update) => {
+  const { currentVersion, version } = update
+  // On Windows, "beta" is removed from the version string. For example, 1.3.11-beta.6 becomes 1.3.11-6
+  return update.available && currentVersion !== version.replace('beta.', '')
 }
