@@ -72,8 +72,7 @@ jobs:
     strategy:
       matrix:
         # macos-14 is the Apple Silicon M1 runner
-        # platform: [windows-latest, macos-14, ubuntu-22.04]
-        platform: [ubuntu-22.04]
+        platform: [ubuntu-22.04, windows-latest, 'macos-12', 'macos-14']
     if: ${{ needs.create-release.outputs.release-published == 'true' }}
 
     steps:
@@ -169,6 +168,7 @@ jobs:
           crabnebula-api-key: ${{ secrets.CN_API_KEY }}
 
   publish-crabnebula:
+    name: Publish CrabNebula release
     needs:
       - create-release
       - build-tauri
