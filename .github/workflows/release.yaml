@@ -72,7 +72,8 @@ jobs:
     strategy:
       matrix:
         # macos-14 is the Apple Silicon M1 runner
-        platform: [windows-latest, macos-14]
+        # platform: [windows-latest, macos-14, ubuntu-22.04]
+        platform: [ubuntu-22.04]
     if: ${{ needs.create-release.outputs.release-published == 'true' }}
 
     steps:
@@ -106,6 +107,24 @@ jobs:
           VITE_DISPENSER_AUTH0_AUDIENCE: api-prod-dispenser-user
           VITE_TESTNET_DISPENSER_API_URL: https://api.dispenser.algorandfoundation.tools
           VITE_TESTNET_DISPENSER_ADDRESS: Z5GPJQCHVU54C2I4FLYNE2XHRQRL5OV2GPJQKXJFMW34CRIN2KRQFXF7DI
+
+      - name: Build for Linux
+        id: build-linux
+        if: ${{ runner.os == 'Linux' }}
+        uses: ./.github/actions/build-linux
+        with:
+          release-version: ${{ needs.create-release.outputs.release-version }}
+          release-tag: ${{ needs.create-release.outputs.release-tag }}
+          production-release: ${{ env.PRODUCTION_RELEASE  }}
+          crabnebula-release-id: ${{ needs.create-release.outputs.crabnebula-release-id }}
+          appimage-signing-private-key: ${{ secrets.APPIMAGE_SIGNING_PRIVATE_KEY }}
+          appimage-signing-private-key-password: ${{ secrets.APPIMAGE_SIGNING_PRIVATE_KEY_PASSWORD }}
+          tauri-signing-public-key: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
+          tauri-signing-private-key: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          tauri-signing-private-key-password: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          crabnebula-org-name: ${{ secrets.CN_ORG_NAME }}
+          crabnebula-app-name: ${{ secrets.CN_APP_NAME }}
+          crabnebula-api-key: ${{ secrets.CN_API_KEY }}
 
       - name: Build for Windows
         id: build-windows
