@@ -69,7 +69,7 @@ runs:
     - name: Import AppImage signing key
       run: |
         echo "${{ inputs.appimage-signing-private-key }}" > appimage.key
-        gpg --import appimage.key --passphrase ${{ inputs.appimage-signing-private-key-password }}
+        gpg2 --batch --passphrase ${{ inputs.appimage-signing-private-key-password }} --import appimage.key
       shell: bash
 
     - name: Build tauri app
