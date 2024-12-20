@@ -68,7 +68,7 @@ runs:
 
     - name: Import AppImage signing key
       run: |
-        echo ${{ inputs.appimage-signing-private-key }} > appimage.key
+        echo "${{ inputs.appimage-signing-private-key }}" > appimage.key
         gpg --import appimage.key --passphrase ${{ inputs.appimage-signing-private-key-password }}
       shell: bash
 
