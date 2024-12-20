@@ -82,3 +82,17 @@ runs:
         SIGN: 1
         APPIMAGETOOL_SIGN_PASSPHRASE: ${{ inputs.appimage-signing-private-key-password }}
         APPIMAGETOOL_FORCE_SIGN: 1
+
+    - name: Upload artifacts to release
+      uses: softprops/action-gh-release@v1
+      with:
+        fail_on_unmatched_files: true
+        files: ${{ env.ARTIFACT_PATH }}
+        tag_name: ${{ inputs.release-tag }}
+        prerelease: ${{ inputs.production-release != 'true' }}
+
+    - name: Upload artifacts to CrabNebula
+      uses: crabnebula-dev/cloud-release@v0.2.0
+      with:
+        command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" --framework tauri ${{ inputs.production-release != 'true' && '--channel beta' || '' }}
+        api-key: ${{ inputs.crabnebula-api-key }}
