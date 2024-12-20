@@ -97,16 +97,16 @@ runs:
     #     cd "$GITHUB_WORKSPACE"
     #     cat './src-tauri/tauri.conf.json' | jq '.build += {"beforeBundleCommand": env.BEFORE_BUNDLE_COMMAND}' > './src-tauri/temp.json' && mv './src-tauri/temp.json' './src-tauri/tauri.conf.json'
 
-    # - name: Build tauri app
-    #   env:
-    #     #   AZURE_TENANT_ID: ${{ inputs.azure_tenant_id }}
-    #     #   AZURE_CLIENT_ID: ${{ inputs.azure_client_id }}
-    #     #   AZURE_CLIENT_SECRET: ${{ inputs.azure_client_secret }}
-    #     TAURI_SIGNING_PRIVATE_KEY: ${{ inputs.tauri-signing-private-key }}
-    #     TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ inputs.tauri-signing-private-key-password }}
-    #   run: |
-    #     npm run tauri build
-    #   shell: pwsh
+    - name: Build tauri app
+      env:
+        #   AZURE_TENANT_ID: ${{ inputs.azure_tenant_id }}
+        #   AZURE_CLIENT_ID: ${{ inputs.azure_client_id }}
+        #   AZURE_CLIENT_SECRET: ${{ inputs.azure_client_secret }}
+        TAURI_SIGNING_PRIVATE_KEY: ${{ inputs.tauri-signing-private-key }}
+        TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ inputs.tauri-signing-private-key-password }}
+      run: |
+        npm run tauri build
+      shell: pwsh
 
     # - name: Sign the installer
     #   uses: azure/trusted-signing-action@v0.3.20
@@ -123,16 +123,10 @@ runs:
     #     timestamp-rfc3161: http://timestamp.acs.microsoft.com
     #     timestamp-digest: SHA256
 
-    # - name: Set env
-    #   run: |
-    #     echo "ARTIFACT_NAME=algokit-lora-windows-${{ runner.arch }}" >> $env:GITHUB_ENV
-    #     echo "ARTIFACT_PATH=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $env:GITHUB_ENV
-    #   shell: pwsh
-
     - name: Set env
       run: |
         echo "ARTIFACT_NAME=algokit-lora-windows-${{ runner.arch }}" >> $env:GITHUB_ENV
-        echo "ARTIFACT_PATH=README.md" >> $env:GITHUB_ENV
+        echo "ARTIFACT_PATH=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $env:GITHUB_ENV
       shell: pwsh
 
     - name: Upload installer artifact
