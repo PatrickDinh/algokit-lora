@@ -101,21 +101,20 @@ runs:
         TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ inputs.tauri-signing-private-key-password }}
 
     - name: Set env
-      id: set-env
       run: |
-        echo "artifact_name=algokit-lora-mac-${{ runner.arch }}" >> $GITHUB_OUTPUT
-        echo "artifact_path=$(ls src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg)" >> $GITHUB_OUTPUT
+        echo "ARTIFACT_NAME=algokit-lora-mac-${{ runner.arch }}" >> $GITHUB_ENV
+        echo "ARTIFACT_PATH=$(ls src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg)" >> $GITHUB_ENV
       shell: bash
 
-    - name: Upload assets as artifact
-      id: upload-artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload artifacts to release
+      uses: softprops/action-gh-release@v1
       with:
-        if-no-files-found: error
-        name: ${{ steps.set-env.outputs.artifact_name }}
-        path: ${{ steps.set-env.outputs.artifact_path }}
+        fail_on_unmatched_files: true
+        files: ${{ env.ARTIFACT_PATH }}
+        tag_name: ${{ inputs.release-tag }}
+        prerelease: ${{ inputs.production-release != 'true' }}
 
-    - name: Upload assets to CrabNebula
+    - name: Upload artifacts to CrabNebula
       uses: crabnebula-dev/cloud-release@v0.2.0
       with:
         command: release upload "${{ inputs.crabnebula-org-name }}/${{ inputs.crabnebula-app-name }}" "${{ inputs.crabnebula-release-id }}" --framework tauri ${{ inputs.production-release != 'true' && '--channel beta' || '' }}

@@ -72,7 +72,7 @@ jobs:
     strategy:
       matrix:
         # macos-14 is the Apple Silicon M1 runner
-        platform: [windows-latest]
+        platform: [macos-14]
     if: ${{ needs.create-release.outputs.release-published == 'true' }}
 
     steps:
