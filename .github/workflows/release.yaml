@@ -71,8 +71,9 @@ jobs:
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
-        # macos-14 is the Apple Silicon M1 runner
-        platform: [ubuntu-22.04, windows-latest, 'macos-13', 'macos-14']
+        # macos-14 is the Apple Arm runner
+        # macos-14-large is the Apple Intel runner
+        platform: [ubuntu-22.04, windows-latest, 'macos-14-large', 'macos-14']
     if: ${{ needs.create-release.outputs.release-published == 'true' }}
 
     steps:
