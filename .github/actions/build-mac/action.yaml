@@ -102,16 +102,12 @@ runs:
         TAURI_SIGNING_PRIVATE_KEY: ${{ inputs.tauri-signing-private-key }}
         TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ inputs.tauri-signing-private-key-password }}
 
-    - name: Set env
-      run: |
-        echo "ARTIFACT_PATH=$(ls src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg)" >> $GITHUB_ENV
-      shell: bash
-
     - name: Upload artifacts to release
       uses: softprops/action-gh-release@v1
       with:
         fail_on_unmatched_files: true
-        files: ${{ env.ARTIFACT_PATH }}
+        files: |
+          ${{ github.workspace }}/src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg
         tag_name: ${{ inputs.release-tag }}
         prerelease: ${{ inputs.production-release != 'true' }}
 

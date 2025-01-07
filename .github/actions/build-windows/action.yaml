@@ -117,23 +117,13 @@ runs:
     #     timestamp-rfc3161: http://timestamp.acs.microsoft.com
     #     timestamp-digest: SHA256
 
-    - name: Set env
-      run: |
-        echo "ARTIFACT_PATH=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $env:GITHUB_ENV
-      shell: pwsh
-
-    # softprops/action-gh-release and crabnebula-dev/cloud-release don't support the \ character in paths
-    - name: Adjust artifacts path for softprops/action-gh-release and crabnebula-dev/cloud-release
-      shell: pwsh
-      run: |
-        $adjusted = '${{ env.ARTIFACT_PATH }}' -replace '\\','/'
-        echo "ARTIFACT_PATH=$adjusted" >> $env:GITHUB_ENV
-
     - name: Upload artifacts to release
       uses: softprops/action-gh-release@v1
       with:
         fail_on_unmatched_files: true
-        files: ${{ env.ARTIFACT_PATH }}
+        files: |
+          ${{ github.workspace }}/src-tauri/target/release/bundle/msi/algokit-lora*.msi
+          ${{ github.workspace }}/src-tauri/target/release/bundle/nsis/algokit-lora*.exe
         tag_name: ${{ inputs.release-tag }}
         prerelease: ${{ inputs.production-release != 'true' }}
 
