@@ -104,7 +104,6 @@ runs:
 
     - name: Set env
       run: |
-        echo "ARTIFACT_NAME=algokit-lora-mac-${{ runner.arch }}" >> $GITHUB_ENV
         echo "ARTIFACT_PATH=$(ls src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg)" >> $GITHUB_ENV
       shell: bash
 

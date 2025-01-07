@@ -119,7 +119,6 @@ runs:
 
     - name: Set env
       run: |
-        echo "ARTIFACT_NAME=algokit-lora-windows-${{ runner.arch }}" >> $env:GITHUB_ENV
         echo "ARTIFACT_PATH=$(ls ${{ github.workspace }}\src-tauri\target\release\bundle\msi\algokit-lora*.msi)" >> $env:GITHUB_ENV
       shell: pwsh
 

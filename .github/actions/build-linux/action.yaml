@@ -84,6 +84,11 @@ runs:
         APPIMAGETOOL_SIGN_PASSPHRASE: ${{ inputs.appimage-signing-private-key-password }}
         APPIMAGETOOL_FORCE_SIGN: 1
 
+    - name: Set env
+      run: |
+        echo "ARTIFACT_PATH=$(ls src-tauri/target/release/bundle/*/algokit-lora_*.*)" >> $GITHUB_ENV
+      shell: bash
+
     - name: Upload artifacts to release
       uses: softprops/action-gh-release@v1
       with:
