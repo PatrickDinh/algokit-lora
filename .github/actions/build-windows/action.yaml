@@ -122,8 +122,8 @@ runs:
       with:
         fail_on_unmatched_files: true
         files: |
-          ${{ github.workspace }}/src-tauri/target/release/bundle/msi/algokit-lora*.msi
-          ${{ github.workspace }}/src-tauri/target/release/bundle/nsis/algokit-lora*.exe
+          src-tauri/target/release/bundle/msi/algokit-lora*.msi
+          src-tauri/target/release/bundle/nsis/algokit-lora*.exe
         tag_name: ${{ inputs.release-tag }}
         prerelease: ${{ inputs.production-release != 'true' }}
 

@@ -89,9 +89,9 @@ runs:
       with:
         fail_on_unmatched_files: true
         files: |
-          ${{ github.workspace }}/src-tauri/target/release/bundle/deb/algokit-lora*.deb
-          ${{ github.workspace }}/src-tauri/target/release/bundle/rpm/algokit-lora*.rpm
-          ${{ github.workspace }}/src-tauri/target/release/bundle/appimage/algokit-lora*.AppImage
+          src-tauri/target/release/bundle/deb/algokit-lora*.deb
+          src-tauri/target/release/bundle/rpm/algokit-lora*.rpm
+          src-tauri/target/release/bundle/appimage/algokit-lora*.AppImage
         tag_name: ${{ inputs.release-tag }}
         prerelease: ${{ inputs.production-release != 'true' }}
 

@@ -107,7 +107,7 @@ runs:
       with:
         fail_on_unmatched_files: true
         files: |
-          ${{ github.workspace }}/src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg
+          src-tauri/target/release/bundle/dmg/algokit-lora_*.dmg
         tag_name: ${{ inputs.release-tag }}
         prerelease: ${{ inputs.production-release != 'true' }}
 
