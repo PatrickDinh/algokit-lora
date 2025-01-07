@@ -93,7 +93,10 @@ runs:
       uses: softprops/action-gh-release@v1
       with:
         fail_on_unmatched_files: true
-        files: ${{ env.ARTIFACT_PATH }}
+        files: |
+          src-tauri/target/release/bundle/deb/algokit-lora_*.deb
+          src-tauri/target/release/bundle/rpm/algokit-lora_*.rpm
+          src-tauri/target/release/bundle/appimage/algokit-lora_*.AppImage
         tag_name: ${{ inputs.release-tag }}
         prerelease: ${{ inputs.production-release != 'true' }}
 
