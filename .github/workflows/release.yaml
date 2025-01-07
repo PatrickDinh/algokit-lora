@@ -73,8 +73,7 @@ jobs:
       matrix:
         # macos-14 is the Apple Arm runner
         # macos-13 is the Apple Intel runner
-        # platform: [ubuntu-22.04, windows-latest, 'macos-14-large', 'macos-14']
-        platform: [macos-13]
+        platform: [ubuntu-22.04, windows-latest, 'macos-14']
     if: ${{ needs.create-release.outputs.release-published == 'true' }}
 
     steps:
