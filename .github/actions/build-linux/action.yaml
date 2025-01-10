@@ -75,7 +75,7 @@ runs:
 
     - name: Build tauri app
       run: |
-        npm run tauri build
+        npm run tauri build --bundles appimage
       shell: bash
       env:
         TAURI_SIGNING_PRIVATE_KEY: ${{ inputs.tauri-signing-private-key }}
