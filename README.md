@@ -15,6 +15,7 @@ Algorand AlgoKit lora is a live on-chain resource analyzer, that enables develop
 
 ## What is lora?
 
+Test message for code review
 AlgoKit lora is a powerful visual tool designed to streamline the Algorand local development experience.
 It acts as both a network explorer and a tool for building and testing your Algorand applications.
 
